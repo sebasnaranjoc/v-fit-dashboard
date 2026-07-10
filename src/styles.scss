@@ -1,0 +1,188 @@
+/* ============================================================
+   V-Fit Admin · Tema de marca (Angular Material M2 personalizado)
+   Primary: #0197b2 (teal, sello de marca, uso medido)
+   Accent : #cfff0d (lima, acento divertido y puntual)
+   Base   : blancos, negros y grises neutros
+   ============================================================ */
+
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+/* ---- Paletas de marca ---- */
+$vfit-teal: (
+  50: #e0f3f6,
+  100: #b3e1e9,
+  200: #80cdda,
+  300: #4db9ca,
+  400: #26aabf,
+  500: #0197b2,
+  600: #018fab,
+  700: #0184a2,
+  800: #017a99,
+  900: #01698a,
+  A100: #aef1ff,
+  A200: #7be8ff,
+  A400: #48dfff,
+  A700: #2edbff,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: rgba(black, 0.87),
+    A700: rgba(black, 0.87),
+  ),
+);
+
+$vfit-lime: (
+  50: #f9ffe1,
+  100: #f0ffb3,
+  200: #e6ff80,
+  300: #dcff4d,
+  400: #d5ff26,
+  500: #cfff0d,
+  600: #b6e800,
+  700: #9bc400,
+  800: #80a300,
+  900: #567000,
+  A100: #ffffff,
+  A200: #f4ffcc,
+  A400: #eaff99,
+  A700: #e2ff80,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: rgba(black, 0.87),
+    600: rgba(black, 0.87),
+    700: rgba(black, 0.87),
+    800: #ffffff,
+    900: #ffffff,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: rgba(black, 0.87),
+    A700: rgba(black, 0.87),
+  ),
+);
+
+$vfit-primary: mat.define-palette($vfit-teal, 500);
+$vfit-accent: mat.define-palette($vfit-lime, 500);
+$vfit-warn: mat.define-palette(mat.$red-palette);
+
+$vfit-typography: mat.define-typography-config(
+  $font-family: 'Inter, Roboto, "Helvetica Neue", sans-serif',
+);
+
+$vfit-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $vfit-primary,
+      accent: $vfit-accent,
+      warn: $vfit-warn,
+    ),
+    typography: $vfit-typography,
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($vfit-theme);
+
+/* ---- Tokens de marca reutilizables ---- */
+:root {
+  --brand: #0197b2;
+  --brand-dark: #017a99;
+  --brand-soft: #e0f3f6;
+  --lime: #cfff0d;
+  --lime-soft: #f2ffb8;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --surface: #ffffff;
+  --bg: #f4f6f8;
+  --line: #eceef1;
+  --radius: 16px;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06),
+    0 1px 3px rgba(16, 24, 40, 0.08);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08);
+  --shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.12);
+}
+
+/* ---- Base ---- */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Roboto, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Cartas más suaves y modernas */
+.mat-mdc-card {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* Botones con más carácter */
+.mat-mdc-raised-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-outlined-button,
+.mat-mdc-button {
+  border-radius: 10px !important;
+  letter-spacing: 0.2px;
+  font-weight: 600;
+}
+
+/* Filas de tabla con hover sutil */
+.mat-mdc-row {
+  transition: background 0.15s ease;
+}
+.mat-mdc-row:hover {
+  background: var(--brand-soft);
+}
+.mat-mdc-header-row {
+  background: #fbfbfc;
+}
+
+/* Diálogos redondeados */
+.mat-mdc-dialog-surface {
+  border-radius: 20px !important;
+}
+
+/* Menús redondeados */
+.mat-mdc-menu-panel {
+  border-radius: 14px !important;
+}
+
+/* Barra de progreso tipo píldora en teal */
+.mat-mdc-progress-bar {
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/* Snackbars */
+.snack-success {
+  --mdc-snackbar-container-color: #0f9d58;
+  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snack-bar-button-color: #cfff0d;
+}
+.snack-error {
+  --mdc-snackbar-container-color: #d32f2f;
+  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snack-bar-button-color: #fff;
+}

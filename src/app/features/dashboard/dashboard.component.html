@@ -1,0 +1,86 @@
+<div class="page-header">
+  <div>
+    <h1>Dashboard</h1>
+    <p class="subtitle">Resumen general de V-Fit</p>
+  </div>
+</div>
+
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+<div class="kpi-grid">
+  <mat-card class="kpi kpi-primary">
+    <mat-icon>payments</mat-icon>
+    <div>
+      <span class="kpi-label">Ingresos</span>
+      <span class="kpi-value">{{ ingresos() | currency: 'COP' : 'symbol-narrow' : '1.0-2' }}</span>
+    </div>
+  </mat-card>
+
+  <mat-card class="kpi">
+    <mat-icon>trending_up</mat-icon>
+    <div>
+      <span class="kpi-label">Ganancia estimada</span>
+      <span class="kpi-value">{{ ganancia() | currency: 'COP' : 'symbol-narrow' : '1.0-2' }}</span>
+    </div>
+  </mat-card>
+
+  <mat-card class="kpi">
+    <mat-icon>shopping_cart</mat-icon>
+    <div>
+      <span class="kpi-label">Compras totales</span>
+      <span class="kpi-value">{{ compras().length }}</span>
+    </div>
+  </mat-card>
+
+  <mat-card class="kpi">
+    <mat-icon>group</mat-icon>
+    <div>
+      <span class="kpi-label">Clientes</span>
+      <span class="kpi-value">{{ clientes().length }}</span>
+    </div>
+  </mat-card>
+</div>
+
+<div class="panels">
+  <mat-card class="panel">
+    <div class="panel-head">
+      <h2>Stock bajo (≤ {{ UMBRAL_STOCK }})</h2>
+      <a mat-button color="primary" routerLink="/productos">Ver productos</a>
+    </div>
+    @if (stockBajo().length === 0) {
+      <p class="muted">Todo el inventario está en buen nivel. 👍</p>
+    } @else {
+      <ul class="stock-list">
+        @for (p of stockBajo(); track p.id) {
+          <li>
+            <span>{{ p.nombre }}</span>
+            <span class="stock-badge">{{ p.stock }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </mat-card>
+
+  <mat-card class="panel">
+    <div class="panel-head">
+      <h2>Últimas compras</h2>
+      <a mat-button color="primary" routerLink="/compras">Ver todas</a>
+    </div>
+    @if (ultimasCompras().length === 0) {
+      <p class="muted">Aún no hay compras.</p>
+    } @else {
+      <div class="recent-list">
+        @for (c of ultimasCompras(); track c.id) {
+          <a class="recent-item" [routerLink]="['/compras', c.id]">
+            <span class="recent-id">#{{ c.id }}</span>
+            <span class="recent-cliente">{{ c.clienteNombre }}</span>
+            <span class="recent-fecha">{{ c.fecha | date: 'dd/MM/yyyy' }}</span>
+            <span class="recent-total">{{ c.total | currency: 'COP' : 'symbol-narrow' : '1.0-2' }}</span>
+          </a>
+        }
+      </div>
+    }
+  </mat-card>
+</div>

@@ -1,0 +1,161 @@
+<div class="page-header">
+  <div>
+    <h1>Reportes</h1>
+    <p class="subtitle">Resultados financieros con filtros</p>
+  </div>
+</div>
+
+@if (loading()) {
+  <mat-progress-bar mode="indeterminate" />
+}
+
+<!-- ===== Filtros ===== -->
+<mat-card class="filtros" [formGroup]="filtros">
+  <div class="quick-ranges">
+    <button mat-stroked-button type="button" (click)="rango('hoy')">Hoy</button>
+    <button mat-stroked-button type="button" (click)="rango('7d')">7 días</button>
+    <button mat-stroked-button type="button" (click)="rango('mes')">Este mes</button>
+    <button mat-stroked-button type="button" (click)="rango('anio')">Este año</button>
+    <button mat-stroked-button type="button" (click)="rango('todo')">Todo</button>
+  </div>
+
+  <div class="filtro-fields">
+    <mat-form-field appearance="outline">
+      <mat-label>Desde</mat-label>
+      <input matInput type="date" formControlName="desde" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput type="date" formControlName="hasta" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Métodos de pago</mat-label>
+      <mat-select formControlName="metodos" multiple>
+        @for (m of metodosPago(); track m.id) {
+          <mat-option [value]="m.id">{{ m.nombre }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente</mat-label>
+      <mat-select formControlName="clienteId">
+        <mat-option [value]="null">Todos</mat-option>
+        @for (cli of clientes(); track cli.id) {
+          <mat-option [value]="cli.id">{{ cli.nombre }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-button type="button" class="clear-btn" (click)="limpiar()">
+      <mat-icon>clear</mat-icon> Limpiar
+    </button>
+  </div>
+</mat-card>
+
+<!-- ===== KPIs ===== -->
+<div class="kpi-grid">
+  <mat-card class="kpi kpi-ingresos">
+    <span class="kpi-label">Ingresos</span>
+    <span class="kpi-value">{{ ingresos() | currency: 'COP' : 'symbol-narrow' : '1.0-2' }}</span>
+  </mat-card>
+  <mat-card class="kpi">
+    <span class="kpi-label">Costos</span>
+    <span class="kpi-value">{{ costos() | currency: 'COP' : 'symbol-narrow' : '1.0-2' }}</span>
+  </mat-card>
+  <mat-card class="kpi kpi-ganancia">
+    <span class="kpi-label">Ganancia · {{ margen() | number: '1.0-1' }}%</span>
+    <span class="kpi-value">{{ ganancia() | currency: 'COP' : 'symbol-narrow' : '1.0-2' }}</span>
+  </mat-card>
+  <mat-card class="kpi">
+    <span class="kpi-label">Compras</span>
+    <span class="kpi-value">{{ nCompras() }}</span>
+  </mat-card>
+  <mat-card class="kpi">
+    <span class="kpi-label">Ticket promedio</span>
+    <span class="kpi-value">{{ ticketPromedio() | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+  </mat-card>
+  <mat-card class="kpi">
+    <span class="kpi-label">Unidades vendidas</span>
+    <span class="kpi-value">{{ unidades() }}</span>
+  </mat-card>
+</div>
+
+@if (nCompras() === 0) {
+  <mat-card class="empty">
+    <mat-icon>search_off</mat-icon>
+    <p>No hay compras que coincidan con los filtros.</p>
+  </mat-card>
+} @else {
+  <div class="panels">
+    <!-- Por método de pago -->
+    <mat-card class="panel">
+      <h2>Por método de pago</h2>
+      <div class="bars">
+        @for (m of porMetodo(); track m.nombre) {
+          <div class="bar-row">
+            <div class="bar-head">
+              <span class="bar-name">{{ m.nombre }}</span>
+              <span class="bar-val">{{ m.ingresos | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" [style.width.%]="m.pct"></div>
+            </div>
+            <div class="bar-sub">
+              {{ m.nCompras }} compra(s) · ganancia
+              {{ m.ganancia | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+            </div>
+          </div>
+        }
+      </div>
+    </mat-card>
+
+    <!-- Por categoría -->
+    <mat-card class="panel">
+      <h2>Por categoría</h2>
+      <div class="bars">
+        @for (cat of porCategoria(); track cat.nombre) {
+          <div class="bar-row">
+            <div class="bar-head">
+              <span class="bar-name">{{ cat.nombre }}</span>
+              <span class="bar-val">{{ cat.ingresos | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill alt" [style.width.%]="cat.pct"></div>
+            </div>
+            <div class="bar-sub">
+              ganancia {{ cat.ganancia | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+            </div>
+          </div>
+        }
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Top productos -->
+  <mat-card class="panel">
+    <h2>Top productos</h2>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th class="num">Unidades</th>
+          <th class="num">Ingresos</th>
+          <th class="num">Ganancia</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of topProductos(); track p.nombre) {
+          <tr>
+            <td>{{ p.nombre }}</td>
+            <td class="num">{{ p.unidades }}</td>
+            <td class="num">{{ p.ingresos | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td class="num ganancia">{{ p.ganancia | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </mat-card>
+}

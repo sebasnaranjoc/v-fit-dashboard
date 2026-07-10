@@ -1,0 +1,140 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  gap: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(16, 24, 40, 0.02);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Logo: chip teal con icono blanco (sello de marca) */
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(1, 151, 178, 0.35);
+
+  mat-icon {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.2px;
+  color: var(--ink);
+  position: relative;
+}
+
+/* "Admin" en gris + punto lima de acento */
+.brand-sub {
+  font-weight: 500;
+  color: var(--muted);
+  margin-left: 6px;
+  font-size: 0.9rem;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lime);
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+}
+
+.account-btn {
+  color: var(--muted);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.container {
+  flex: 1;
+}
+
+.sidenav {
+  width: 248px;
+  border-right: 1px solid var(--line);
+  background: #ffffff;
+  padding: 12px 10px;
+
+  ::ng-deep .mat-mdc-list-item {
+    border-radius: 12px;
+    margin-bottom: 4px;
+    height: 46px;
+  }
+
+  ::ng-deep .mat-mdc-list-item .mdc-list-item__primary-text {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  ::ng-deep .mat-mdc-list-item .mat-icon {
+    color: var(--muted);
+  }
+}
+
+.content {
+  padding: 24px;
+  box-sizing: border-box;
+  background: var(--bg);
+}
+
+/* Ítem activo: teal suave con barra lateral y texto/icono de marca */
+.active-link {
+  background: var(--brand-soft) !important;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background: var(--brand);
+  }
+
+  ::ng-deep .mdc-list-item__primary-text {
+    color: var(--brand-dark) !important;
+    font-weight: 700 !important;
+  }
+
+  ::ng-deep .mat-icon {
+    color: var(--brand) !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .content {
+    padding: 12px;
+  }
+}
